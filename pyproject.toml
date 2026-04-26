@@ -1,0 +1,66 @@
+[project]
+name = "football-squad-bot"
+version = "0.1.0"
+description = "Telegram bot for forming balanced squads in amateur football"
+requires-python = ">=3.13"
+dependencies = [
+    "aiohttp>=3.10",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["football_bot"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "import-linter>=2.0",
+    "pre-commit>=3.8",
+    "detect-secrets>=1.5",
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+]
+
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "TCH", "RUF", "C4", "PTH"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+disallow_untyped_decorators = true
+files = ["football_bot", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.importlinter]
+root_package = "football_bot"
+
+[[tool.importlinter.contracts]]
+name = "Domain has no dependencies on Application or Adapters"
+type = "forbidden"
+source_modules = ["football_bot.domain"]
+forbidden_modules = ["football_bot.application", "football_bot.adapters"]
+
+[[tool.importlinter.contracts]]
+name = "Application has no dependencies on Adapters"
+type = "forbidden"
+source_modules = ["football_bot.application"]
+forbidden_modules = ["football_bot.adapters"]
